@@ -141,7 +141,10 @@ if [ "$sco1" -gt "1" ] && [ "$(grep -c '' $fhome"sftp_1.txt")" -gt "3" ]; then
 	sftp_on=1
 	logger "watcher sftp_on="$sftp_on
 fi
-
+if [ "$sco1" -eq "0" ] && [ "$sco2" -eq "0" ]; then
+	logger "watcher sco1=sco2=0 ERROR"
+	sftp_on=0
+fi
 }
 
 
