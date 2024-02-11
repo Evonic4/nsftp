@@ -109,19 +109,17 @@ fi
 watcher ()
 {
 logger "watcher start"
-
 constructor_and_go;
 sco1=$(wc -m $fhome"sftp_1.txt" | awk '{ print $1 }')
 sco2=$(wc -m $fhome"sftp_2.txt" | awk '{ print $1 }')
-
 logger "watcher sco1="$sco1" sco2="$sco2
+sftp_on=0
 
 if [ "$sco2" -gt "1" ] && [ "$(grep -c 'Permanently added' $fhome"sftp_2.txt")" -eq "0" ]; then		#error
 	err_count_sftp=$((err_count_sftp+1))
 	logger "watcher err_count_sftp="$err_count_sftp
-	sftp_on=0
-	logger "watcher sftp_on="$sftp_on
 fi
+[ "$sco1" -gt "1" ] && sftp_on=1
 if [ "$sco1" -gt "1" ] && [ "$(grep -c '' $fhome"sftp_1.txt")" -gt "3" ]; then
 	grep -E "$sftp_pattern" $fhome"sftp_1.txt" > $fhome"sftp_11.txt"
 	num_files_if0=$(grep -c "" $fhome"sftp_11.txt")
@@ -137,14 +135,12 @@ if [ "$sco1" -gt "1" ] && [ "$(grep -c '' $fhome"sftp_1.txt")" -gt "3" ]; then
 	grep '' $fhome"sftp_1_r1.txt" | awk '$1>1024 {print}' > $fhome"sftp_1_r2.txt"
 	num_files_if1=$(grep -c "" $fhome"sftp_1_r2.txt")
 	logger "watcher num_files_if1="$num_files_if1
-	
-	sftp_on=1
-	logger "watcher sftp_on="$sftp_on
 fi
 if [ "$sco1" -eq "0" ] && [ "$sco2" -eq "0" ]; then
 	logger "watcher sco1=sco2=0 ERROR"
-	sftp_on=0
+	sftp_on=-1
 fi
+logger "watcher sftp_on="$sftp_on
 }
 
 
