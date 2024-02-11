@@ -45,8 +45,8 @@ rm -f $fhome"sftp_2.txt"
 
 cp -f $fhome"0.sh" $fhome"start_sftp.sh"
 
-echo "export SSHPASS="$sftp_pass >> $fhome"start_sftp.sh"
-echo "sshpass -e sftp -oBatchMode=no -b - "$sftp_user"@"$sftp_host" 1>"$fhome"sftp_1.txt 2>"$fhome"sftp_2.txt << !" >> $fhome"start_sftp.sh"
+#echo "export SSHPASS="$sftp_pass >> $fhome"start_sftp.sh"
+echo "sshpass -p "$sftp_pass" sftp -oStrictHostKeyChecking=no -oBatchMode=no -b - "$sftp_user"@"$sftp_host" 1>"$fhome"sftp_1.txt 2>"$fhome"sftp_2.txt << !" >> $fhome"start_sftp.sh"
 echo "   cd coupons" >> $fhome"start_sftp.sh"
 echo "   ls -lh" >> $fhome"start_sftp.sh"
 echo "   bye" >> $fhome"start_sftp.sh"
