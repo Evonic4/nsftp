@@ -116,7 +116,7 @@ sco2=$(wc -m $fhome"sftp_2.txt" | awk '{ print $1 }')
 
 logger "watcher sco1="$sco1" sco2="$sco2
 
-if [ "$sco2" -gt "1" ]; then	#error
+if [ "$sco2" -gt "1" ] && [ "$(grep -c 'Permanently added' $fhome"sftp_2.txt")" -eq "0" ]; then		#error
 	err_count_sftp=$((err_count_sftp+1))
 	logger "watcher err_count_sftp="$err_count_sftp
 	sftp_on=0
