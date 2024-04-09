@@ -1,6 +1,6 @@
 #!/bin/bash
 export PATH="$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
-ver="v0.1"
+ver="v0.2"
 fhome=/usr/share/nsftp/
 cd $fhome
 
@@ -46,8 +46,9 @@ rm -f $fhome"sftp_2.txt"
 cp -f $fhome"0.sh" $fhome"start_sftp.sh"
 
 #echo "export SSHPASS="$sftp_pass >> $fhome"start_sftp.sh"
+
 echo "sshpass -p "$sftp_pass" sftp -oStrictHostKeyChecking=no -oBatchMode=no -b - "$sftp_user"@"$sftp_host" 1>"$fhome"sftp_1.txt 2>"$fhome"sftp_2.txt << !" >> $fhome"start_sftp.sh"
-echo "   cd coupons" >> $fhome"start_sftp.sh"
+! [ -z "$sftp_folder" ] &&	echo "   cd "$sftp_folder >> $fhome"start_sftp.sh"
 echo "   ls -lh" >> $fhome"start_sftp.sh"
 echo "   bye" >> $fhome"start_sftp.sh"
 echo "!" >> $fhome"start_sftp.sh"
