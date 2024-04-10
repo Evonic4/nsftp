@@ -21,8 +21,8 @@ sftp_user=$(sed -n 8"p" $fhome"sett.conf" | tr -d '\r')
 sftp_pass=$(sed -n 9"p" $fhome"sett.conf" | tr -d '\r')
 sftp_folder=$(sed -n 10"p" $fhome"sett.conf" | tr -d '\r')
 sftp_pattern=$(sed -n 11"p" $fhome"sett.conf" | tr -d '\r')
-
 every=$(sed -n 12"p" $fhome"sett.conf" | tr -d '\r')
+max_limit=$(sed -n 13"p" $fhome"sett.conf" | tr -d '\r')
 
 err_count_sftp=0
 sftp_on=1
@@ -101,7 +101,7 @@ for (( i2=1;i2<=$str_col2;i2++)); do
 		test1=$(echo $test | sed 's/B//g' | sed 's/^[ \t]*//;s/[ \t]*$//')
 	fi
 	echo $test1 >> $fhome"sftp_1_r1.txt"
-	logger "razmer_v_B "$test" -> "$test1
+	logger "razmer_v_B "$i2" - "$test" -> "$test1
 done
 else
 	logger "razmer_v_B str_col2=0"
@@ -136,8 +136,8 @@ if [ "$sco1" -gt "1" ] && [ "$(grep -c '' $fhome"sftp_1.txt")" -gt "3" ]; then
 	cat $fhome"sftp_11.txt" | awk '{ print $5 }' > $fhome"sftp_1_r.txt"
 	
 	razmer_v_B;
-	
-	grep '' $fhome"sftp_1_r1.txt" | awk '$1>1024 {print}' > $fhome"sftp_1_r2.txt"
+	logger "watcher max_limit="$max_limit
+	grep '' $fhome"sftp_1_r1.txt" | awk '$1>"$max_limit" {print}' > $fhome"sftp_1_r2.txt"
 	num_files_if1=$(grep -c "" $fhome"sftp_1_r2.txt")
 	logger "watcher num_files_if1="$num_files_if1
 fi
@@ -149,7 +149,7 @@ logger "watcher sftp_on="$sftp_on
 }
 
 
-pushgateway_start ()	#9044-9050
+pushgateway_start ()	#9050
 {
 logger "pushgateway_start pushg_port="$pushg_port
 cp -f $fhome"0.sh" $fhome"start_pg.sh"
