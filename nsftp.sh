@@ -1,6 +1,6 @@
 #!/bin/bash
 export PATH="$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
-ver="v0.2"
+ver="v0.21"
 fhome=/usr/share/nsftp/
 cd $fhome
 
@@ -87,9 +87,13 @@ for (( i2=1;i2<=$str_col2;i2++)); do
 	test=$(sed -n $i2"p" $fhome"sftp_1_r.txt" | tr -d '\r')
 	if [ "$(echo $test | grep -c "G" )" -gt "0" ]; then
 		test1=$(echo $test | sed 's/G//g' | sed 's/^[ \t]*//;s/[ \t]*$//')
-		test1=$(echo "$test1*1024*1024" | bc)
+		test1=$(echo "$test1*1024*1024*1024" | bc)
 	fi
 	if [ "$(echo $test | grep -c "M" )" -gt "0" ]; then
+		test1=$(echo $test | sed 's/M//g' | sed 's/^[ \t]*//;s/[ \t]*$//')
+		test1=$(echo "$test1*1024*1024" | bc)
+	fi
+	if [ "$(echo $test | grep -c "K" )" -gt "0" ]; then
 		test1=$(echo $test | sed 's/M//g' | sed 's/^[ \t]*//;s/[ \t]*$//')
 		test1=$(echo "$test1*1024" | bc)
 	fi
