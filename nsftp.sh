@@ -137,7 +137,10 @@ if [ "$sco1" -gt "1" ] && [ "$(grep -c '' $fhome"sftp_1.txt")" -gt "3" ]; then
 	
 	razmer_v_B;
 	logger "watcher max_limit="$max_limit
-	grep '' $fhome"sftp_1_r1.txt" | awk '$1>"$max_limit" {print}' > $fhome"sftp_1_r2.txt"
+	#grep '' $fhome"sftp_1_r1.txt" | awk '$1>$max_limit {print}' > $fhome"sftp_1_r2.txt"
+	constructor2;
+	$fhome"sftp_flimit.sh"
+	
 	num_files_if1=$(grep -c "" $fhome"sftp_1_r2.txt")
 	logger "watcher num_files_if1="$num_files_if1
 fi
@@ -147,6 +150,16 @@ if [ "$sco1" -eq "0" ] && [ "$sco2" -eq "0" ]; then
 fi
 logger "watcher sftp_on="$sftp_on
 }
+
+
+constructor2 ()
+{
+logger "constructor2 start"
+cp -f $fhome"0.sh" $fhome"sftp_flimit.sh"
+echo "grep '' "$fhome"sftp_1_r1.txt | awk '\$1>"$max_limit" {print}' > "$fhome"sftp_1_r2.txt" >> $fhome"sftp_flimit.sh"
+$fhome"setup.sh"
+}
+#fhome="/usr/share/nsftp/"; max_limit=1133; cp -f $fhome"0.sh" $fhome"sftp_flimit.sh"; echo "grep '' "$fhome"sftp_1_r1.txt | awk '\$1>"$max_limit" {print}' > "$fhome"sftp_1_r2.txt" >> $fhome"sftp_flimit.sh"
 
 
 pushgateway_start ()	#9050
